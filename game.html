@@ -2,104 +2,104 @@
     <head>
         <style>
 
-* { box-sizing: border-box; }
-body { background-color:#222; }
-.aliens {
-  width:300px;
-  height:80px;
-  display:flex;
-  margin-top:20px;
-}
-.alien {
-  width:29%;
-  margin:0 2%;
-  transition:background 700ms;
-}
-.alien-1 {
-  border:4px solid magenta;
-}
-.alien-2 {
-  border:4px solid cyan;
-}
-.alien-3 {
-  border:4px solid yellow;
-}
-.alien.active {
-  background-color:#fff;
-  transition:background 10ms linear 300ms;
-}
-.area {
-  width:300px;
-  height:100px;
-  position:relative;
-  margin-bottom:30px;
-}
-.ship {
-  width:60px;
-  height:100px;
-  position:absolute;
-  bottom:0;
-  left:0;
-  animation: moving 6s linear infinite;
-  animation-play-state: running;
-}
-.ship.active { animation-play-state: paused; }
+            * { box-sizing: border-box; }
+            body { background-color:#222; }
+            .aliens {
+              width:300px;
+              height:80px;
+              display:flex;
+              margin-top:20px;
+            }
+            .alien {
+              width:29%;
+              margin:0 2%;
+              transition:background 700ms;
+            }
+            .alien-1 {
+              border:4px solid magenta;
+            }
+            .alien-2 {
+              border:4px solid cyan;
+            }
+            .alien-3 {
+              border:4px solid yellow;
+            }
+            .alien.active {
+              background-color:#fff;
+              transition:background 10ms linear 300ms;
+            }
+            .area {
+              width:300px;
+              height:100px;
+              position:relative;
+              margin-bottom:30px;
+            }
+            .ship {
+              width:60px;
+              height:100px;
+              position:absolute;
+              bottom:0;
+              left:0;
+              animation: moving 6s linear infinite;
+              animation-play-state: running;
+            }
+            .ship.active { animation-play-state: paused; }
 
-.ship .body {
-  background-color: green;
-  width:60px;
-  height:30px;
-  position:absolute;
-  bottom:0;
-  left:0;
-  z-index:2;
-}
-.ship .missle {
-  background-color:white;
-  width:4px;
-  height:30px;
-  position:absolute;
-  margin-left:-2px;
-  left:50%;
-  bottom:0;
-  z-index:1;
-  transition: all 1ms;
-}
-.ship.active .missle {
-  bottom:100%;
-  opacity:0;
-  transition: all 300ms;
-}
-#perc {
-  position:absolute;
-  width:60px;
-  text-align:center;
-  font-family:Arial;
-  font-size:14px;
-  color:white;
-  left:0;
-  bottom:-21px;
-}
-@keyframes moving {
-  0%, 100% { left: 0% }
-  50% { left: calc(100% - 60px) }
-}
-#btn {
-  background:red;
-  border:none;
-  border-radius:99px;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:white;
-  font-size:20px;
-  width:120px;
-  height:120px;
-  margin-left:90px;
-  transition:opacity 100ms;
-}
-#btn:active {opacity:.7}
+            .ship .body {
+              background-color: green;
+              width:60px;
+              height:30px;
+              position:absolute;
+              bottom:0;
+              left:0;
+              z-index:2;
+            }
+            .ship .missle {
+              background-color:white;
+              width:4px;
+              height:30px;
+              position:absolute;
+              margin-left:-2px;
+              left:50%;
+              bottom:0;
+              z-index:1;
+              transition: all 1ms;
+            }
+            .ship.active .missle {
+              bottom:100%;
+              opacity:0;
+              transition: all 300ms;
+            }
+            #perc {
+              position:absolute;
+              width:60px;
+              text-align:center;
+              font-family:Arial;
+              font-size:14px;
+              color:white;
+              left:0;
+              bottom:-21px;
+            }
+            @keyframes moving {
+              0%, 100% { left: 0% }
+              50% { left: calc(100% - 60px) }
+            }
+            #btn {
+              background:red;
+              border:none;
+              border-radius:99px;
+              cursor:pointer;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              color:white;
+              font-size:20px;
+              width:120px;
+              height:120px;
+              margin-left:90px;
+              transition:opacity 100ms;
+            }
+            #btn:active {opacity:.7}
 
         </style>
     </head>
@@ -122,18 +122,27 @@ body { background-color:#222; }
         <script>
 
             var ship = document.getElementById('ship');
+
             document.getElementById('btn').addEventListener('click', function(){
+
+                // find spaceship's position to locate which aliens is going to hit
                 var hit = Math.round((Number(window.getComputedStyle(ship,null).getPropertyValue('left').replace('px', ''))/(300-60))*100);
                 var pos;
                 if (hit <= 28) { pos = 1; }
                 if (hit > 28 && hit <= 71) { pos = 2; }
                 if (hit > 71) { pos = 3; }
+                
+                // launch spaceship's rocket
+                ship.classList.add('active');
+                setTimeout(function(){ ship.classList.remove('active'); }, 500)
+                // kill specific alien
                 var alien = document.querySelector('.alien-' + pos);
                 alien.classList.add('active');
                 setTimeout(function(){ alien.classList.remove('active'); }, 400)
-                ship.classList.add('active');
-                setTimeout(function(){ ship.classList.remove('active'); }, 500)
+
             });
+
+            // show spacehip's position (%)
             setInterval(function(){
                 document.getElementById('perc').innerText = Math.round((Number(window.getComputedStyle(ship,null).getPropertyValue('left').replace('px', ''))/(300-60))*100) + '%';
             }, 100);
